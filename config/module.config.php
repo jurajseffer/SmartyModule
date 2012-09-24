@@ -1,7 +1,5 @@
 <?php
 
-//die( __DIR__ . '/../../view');
-
 return array(
 
 	'alias' => array(

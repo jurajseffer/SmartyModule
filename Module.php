@@ -3,7 +3,10 @@
 namespace SmartyModule;
 
 use Zend\ModuleManager\ModuleManager,
-    Zend\EventManager\StaticEventManager;
+    Zend\EventManager\StaticEventManager,
+    Zend\View\HelperPluginManager,
+    Zend\Form\View\HelperConfig;
+	
 
 class Module
 {
@@ -38,10 +41,12 @@ class Module
 		//	$smarty->force_compile = false;
 		//}
 		
+		/*
 		$renderer->setHelperPluginManager(new HelperPluginManager(new HelperConfig()));
 		$config = $serviceManager->get('config');
 		$router = \Zend\Mvc\Router\SimpleRouteStack::factory($config['router']);
 		$renderer->plugin('url')->setRouter($router);
+		*/
 		
 		if (isset($basePath)) {
 			$renderer->plugin('basePath')->setBasePath($basePath);

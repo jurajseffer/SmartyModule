@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Murga Nikolay work@murga.kiev.ua
- * Date: 05.03.12
- * Time: 11:32
- */
+
 namespace SmartyModule\View\Strategy;
 
 use Zend\EventManager\EventCollection,

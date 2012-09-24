@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: Murga Nikolay work@murga.kiev.ua
- * Date: 28.02.12
- * Time: 16:52
- */
 
 namespace SmartyModule\View\Renderer;
 
@@ -28,13 +22,12 @@ class SmartyRenderer extends PhpRenderer
 
     public function init()
     {
-        //$this->setSmarty(new \Smarty());
+       
     }
 
     /**
      * @param \Smarty $smarty
      */
-
     public function setSmarty($smarty) {
         $this->smarty = $smarty;
         $this->smarty->assign('this', $this);
@@ -48,11 +41,7 @@ class SmartyRenderer extends PhpRenderer
 
     public function render($nameOrModel, $values = null)
     {
-	
-		//print_r($this->smarty);
-	
-		//die('RENDERING!!');
-	
+
         if ($nameOrModel instanceof ModelInterface) {
             $model = $nameOrModel;
             $nameOrModel = $model->getTemplate();
