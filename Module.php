@@ -9,7 +9,7 @@ class Module
 {
 	
 	public function onBootstrap($e) {
-		//$this->initializeView($e);	
+		$this->initializeView($e);	
 		$this->setupView($e);
 	} 
 
