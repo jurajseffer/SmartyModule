@@ -10,7 +10,7 @@ namespace SmartyModule\View\Renderer;
 
 use Zend\View\Renderer\PhpRenderer,
     Zend\View\Exception,
-    Zend\View\Model,
+    Zend\View\Model\ModelInterface,
     ArrayAccess;
 
 class SmartyRenderer extends PhpRenderer
@@ -45,11 +45,15 @@ class SmartyRenderer extends PhpRenderer
         return $this->smarty;
     }
 
+
     public function render($nameOrModel, $values = null)
     {
-
-        if ($nameOrModel instanceof Model) {
-
+	
+		//print_r($this->smarty);
+	
+		//die('RENDERING!!');
+	
+        if ($nameOrModel instanceof ModelInterface) {
             $model = $nameOrModel;
             $nameOrModel = $model->getTemplate();
             if (empty($nameOrModel)) {
@@ -72,7 +76,6 @@ class SmartyRenderer extends PhpRenderer
             // Give view model awareness via ViewModel helper
             $helper = $this->plugin('view_model');
             $helper->setCurrent($model);
-
             $values = $model->getVariables();
             unset($model);
         }
@@ -85,10 +88,10 @@ class SmartyRenderer extends PhpRenderer
             $this->setVars($values);
         }
         unset($values);
-
         // extract all assigned vars (pre-escaped), but not 'this'.
         // assigns to a double-underscored variable, to prevent naming collisions
         $__vars = $this->vars()->getArrayCopy();
+
         $__vars['this'] = $this;
         $this->smarty->assign($__vars);
 
@@ -102,10 +105,13 @@ class SmartyRenderer extends PhpRenderer
                     $this->__template
                 ));
             }
+            $tmplDir = dirname(dirname($this->__file));
+            $this->smarty->setTemplateDir($tmplDir);
             $this->__content = $this->smarty->fetch($this->__file);
         }
         return $this->getFilterChain()->filter($this->__content); // filter output
     }
+
 
     public function __clone()
     {

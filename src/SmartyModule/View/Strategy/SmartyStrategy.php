@@ -8,37 +8,26 @@
 namespace SmartyModule\View\Strategy;
 
 use Zend\EventManager\EventCollection,
-    Zend\EventManager\ListenerAggregate,
+    Zend\EventManager\EventManagerInterface,
+    Zend\EventManager\ListenerAggregateInterface,
     Zend\View\ViewEvent,
     SmartyModule\View\Renderer\SmartyRenderer;
 
-class SmartyStrategy implements ListenerAggregate
-{
-    protected $view;
-
-    protected $viewListener;
+class SmartyStrategy implements ListenerAggregateInterface {
+    protected $renderer;
+    protected $listeners = array();
 
     public function __construct(SmartyRenderer $renderer)
     {
         $this->renderer = $renderer;
     }
 
-    /**
-     * Attach one or more listeners
-     *
-     * Implementors may add an optional $priority argument; the EventManager
-     * implementation will pass this to the aggregate.
-     *
-     * @param \SmartyModule\View\Strategy\EventCollection|\Zend\EventManager\EventCollection $events
-     * @param int $priority
-     */
-    public function attach(EventCollection $events, $priority = 1)
-    {
-        $this->listeners[] = $events->attach('renderer', array($this, 'selectRenderer'), $priority);
-        $this->listeners[] = $events->attach('response', array($this, 'injectResponse'), $priority);
+    public function attach(EventManagerInterface $events) {
+        $this->listeners[] = $events->attach('renderer', array($this, 'selectRenderer'));
+        $this->listeners[] = $events->attach('response', array($this, 'injectResponse'));
     }
 
-    public function detach(EventCollection $events)
+    public function detach(EventManagerInterface $events)
     {
         foreach ($this->listeners as $index => $listener) {
             if ($events->detach($listener)) {
