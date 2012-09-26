@@ -2,7 +2,7 @@
 
 namespace SmartyModule;
 
-use Zend\ModuleManager\ModuleManager,
+use Zend\ModuleManager\ModuleManager as Manager,
     Zend\EventManager\StaticEventManager,
     Zend\View\HelperPluginManager,
     Zend\Form\View\HelperConfig;
@@ -18,7 +18,7 @@ class Module
 
 	public function initializeView($e)
 	{
-		global $config;
+		//global $config;
 		$app          = $e->getParam('application');
 		$request = $app->getRequest();
 
@@ -36,32 +36,23 @@ class Module
         
 		$smarty = $renderer->getEngine();
 		$config = $serviceManager->get('Config');
-		//if ($config['environment'] == "production") {
-		//	$smarty->compile_check = false;
-		//	$smarty->force_compile = false;
-		//}
-		
-		/*
+
 		$renderer->setHelperPluginManager(new HelperPluginManager(new HelperConfig()));
+
 		$config = $serviceManager->get('config');
-		$router = \Zend\Mvc\Router\SimpleRouteStack::factory($config['router']);
-		$renderer->plugin('url')->setRouter($router);
-		*/
+		foreach ($config['smarty'] as $key=>$value) {
+			if (isset($smarty->$key))
+				$smarty->$key = $value;
+		}
+
+		//$router = Zend\Mvc\Router\SimpleRouteStack::factory($config['router']);
+		//$renderer->plugin('url')->setRouter($router);
 		
 		if (isset($basePath)) {
 			$renderer->plugin('basePath')->setBasePath($basePath);
 		}
 	}
 	
-	
-/*
-    public function init($manager)
-    {
-        // Register a bootstrap event
-        $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'setupView'));
-    }
-*/
     public function setupView($e)
     {
           // Register a render event
@@ -72,7 +63,6 @@ class Module
           $view->addRenderingStrategy(array($smartyRendererStrategy, 'selectRenderer'), 100);
           $view->addResponseStrategy(array($smartyRendererStrategy,  'injectResponse'), 100);
     } 
-
 
     public function getAutoloaderConfig()
     {

@@ -5,7 +5,19 @@ return array(
 	'alias' => array(
 		'view' => 'SmartyModule\View\Renderer\SmartyRenderer',
 	),
-	
+
+
+	'smarty' => array(
+		'compile_check' => true,
+		'force_compile' => true,
+		'caching' => false,
+		'force_cache' => false,
+		'cache_lifetime' => '3600',
+		'debugging' => true,
+		'escape_html' => false,
+		
+	),
+
 	
 	'view_manager' => array(
 		'display_not_found_reason' => true,
