@@ -4,12 +4,13 @@
 
 Version 1.0.2
 
-### INSTALLATION
+## INSTALLATION
 
-clone it
+* clone it
+* add it to the modules-part in your application.config.php
+* edit SmartyModule/config/module.config.php as you wish
+* like it :)
 
-add it to the modules-part in your application.config.php
+## additional Info
 
-edit SmartyModule/config/module.config.php as you wish
-
-like it :)
+Thank you all for inspiration and help to improve it.
