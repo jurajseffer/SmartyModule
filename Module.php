@@ -5,7 +5,8 @@ namespace SmartyModule;
 use Zend\ModuleManager\ModuleManager as Manager,
     Zend\EventManager\StaticEventManager,
     Zend\View\HelperPluginManager,
-    Zend\Form\View\HelperConfig;
+    Zend\Form\View\HelperConfig,
+    Zend\Mvc\Router\SimpleRouteStack;
 	
 
 class Module
@@ -18,18 +19,17 @@ class Module
 
 	public function initializeView($e)
 	{
-		//global $config;
-		$app          = $e->getParam('application');
+		$app = $e->getParam('application');
 		$request = $app->getRequest();
 
 		// support cli requests which do not have a base path
 		if (method_exists($request, 'getBasePath')) {
-			$basePath     = $app->getRequest()->getBasePath();
+			$basePath = $app->getRequest()->getBasePath();
 		}
-		$serviceManager      = $app->getServiceManager();
+		$serviceManager = $app->getServiceManager();
 
-		$view         = $serviceManager->get('Zend\View\View');
-		$strategy     = $serviceManager->get('SmartyModule\View\Strategy\SmartyStrategy');
+		$view = $serviceManager->get('Zend\View\View');
+		$strategy = $serviceManager->get('SmartyModule\View\Strategy\SmartyStrategy');
 		$renderer = $strategy->getRenderer();
 		$resolver = $serviceManager->get('viewresolver');
 		$renderer->setResolver($resolver);
@@ -37,16 +37,13 @@ class Module
 		$smarty = $renderer->getEngine();
 		$config = $serviceManager->get('Config');
 
+        foreach ($config['smarty'] as $key=>$value) {
+            if (isset($smarty->$key))
+                $smarty->$key = $value;
+        }
+
 		$renderer->setHelperPluginManager(new HelperPluginManager(new HelperConfig()));
-
-		$config = $serviceManager->get('config');
-		foreach ($config['smarty'] as $key=>$value) {
-			if (isset($smarty->$key))
-				$smarty->$key = $value;
-		}
-
-		//$router = Zend\Mvc\Router\SimpleRouteStack::factory($config['router']);
-		//$renderer->plugin('url')->setRouter($router);
+		$renderer->plugin('url')->setRouter(SimpleRouteStack::factory($config['router']['routes']));
 		
 		if (isset($basePath)) {
 			$renderer->plugin('basePath')->setBasePath($basePath);
