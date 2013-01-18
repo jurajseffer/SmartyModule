@@ -22,7 +22,7 @@ class SmartyRenderer extends PhpRenderer
 
     public function init()
     {
-       
+
     }
 
     /**
@@ -83,6 +83,12 @@ class SmartyRenderer extends PhpRenderer
 
         $__vars['this'] = $this;
         $this->smarty->assign($__vars);
+
+        foreach ($this->resolver()->getIterator() as $resolver) {
+        	if ($resolver instanceof TemplatePathStack) {
+        		$resolver->setDefaultSuffix(".tpl");
+        	}
+        }
 
         while ($this->__template = array_pop($this->__templates))
         {
